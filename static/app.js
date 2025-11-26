@@ -93,15 +93,44 @@ async function setupWebcam() {
 
 function updateStatus(text, colorClass) {
     statusText.textContent = text;
-    statusIndicator.className = `w-3 h-3 rounded-full ${colorClass} animate-pulse`;
+    statusIndicator.className = `w-4 h-4 rounded-full ${colorClass} shadow-lg`;
 }
 
 function addMessageToUI(role, text) {
     const div = document.createElement('div');
-    div.className = `p-3 rounded-lg ${role === 'You' ? 'bg-blue-600/20 ml-8 border border-blue-500/30' : 'bg-slate-700/50 mr-8 border border-slate-600/30'}`;
-    div.innerHTML = `<div class="text-xs text-slate-400 mb-1 font-bold">${role}</div><div class="text-sm">${text}</div>`;
+
+    // Beautiful unique colors for User vs AI
+    if (role === 'You') {
+        // User: Cyan-Blue gradient with glow
+        div.className = 'chat-message p-4 rounded-xl ml-8 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 border-2 border-cyan-400/40 shadow-lg shadow-cyan-500/20';
+        div.innerHTML = `
+            <div class="flex items-center gap-2 mb-2">
+                <div class="w-2 h-2 rounded-full bg-cyan-400"></div>
+                <div class="text-xs font-bold text-cyan-300">${role}</div>
+            </div>
+            <div class="text-sm text-white">${text}</div>
+        `;
+    } else {
+        // AI: Purple-Pink gradient with glow
+        div.className = 'chat-message p-4 rounded-xl mr-8 bg-gradient-to-r from-purple-500/20 to-pink-500/20 border-2 border-purple-400/40 shadow-lg shadow-purple-500/20';
+        div.innerHTML = `
+            <div class="flex items-center gap-2 mb-2">
+                <div class="w-2 h-2 rounded-full bg-purple-400 animate-pulse"></div>
+                <div class="text-xs font-bold text-purple-300">${role}</div>
+            </div>
+            <div class="text-sm text-white">${text}</div>
+        `;
+    }
+
     chatHistoryEl.appendChild(div);
     chatHistoryEl.scrollTop = chatHistoryEl.scrollHeight;
+
+    // Update message count
+    const messageCount = document.getElementById('message-count');
+    if (messageCount) {
+        const count = chatHistoryEl.querySelectorAll('.chat-message').length;
+        messageCount.textContent = count;
+    }
 }
 
 function speak(text) {
@@ -188,7 +217,6 @@ function startInterview() {
 uploadForm.addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    state.apiKey = document.getElementById('api-key').value;
     state.jobRole = document.getElementById('job-role').value;
     const resumeFile = document.getElementById('resume-file').files[0];
 
@@ -242,7 +270,7 @@ function endInterview() {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            history: JSON.stringify(state.history), // Send as string or handle list in backend
+            history: JSON.stringify(state.history),
             context: `Role: ${state.jobRole}\nResume: ${state.resumeText}`,
             apiKey: state.apiKey
         })
@@ -250,19 +278,113 @@ function endInterview() {
         .then(res => res.json())
         .then(data => {
             const feedback = data.feedback;
-            // Display feedback (simple alert or modal for now, or replace chat)
-            const feedbackDiv = document.createElement('div');
-            feedbackDiv.className = 'p-6 bg-slate-800 rounded-xl border border-purple-500/50 mt-4';
-            feedbackDiv.innerHTML = `<h2 class="text-xl font-bold mb-4 text-purple-400">Interview Feedback</h2><div class="prose prose-invert">${marked.parse(feedback)}</div>`;
 
-            // Hide chat and show feedback
-            chatHistoryEl.innerHTML = '';
-            chatHistoryEl.appendChild(feedbackDiv);
-            updateStatus('Interview Complete', 'bg-green-500');
+            // Hide interview section
+            interviewSection.classList.add('hidden');
+
+            // Create beautiful full-page feedback display
+            const feedbackSection = document.createElement('div');
+            feedbackSection.id = 'feedback-section';
+            feedbackSection.className = 'glass rounded-3xl p-6 sm:p-8 lg:p-10 shadow-2xl';
+            feedbackSection.innerHTML = `
+                <!-- Header -->
+                <div class="text-center mb-8">
+                    <div class="inline-block p-4 bg-gradient-to-r from-green-400 to-emerald-500 rounded-full mb-4">
+                        <svg class="w-16 h-16 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <h1 class="text-4xl sm:text-5xl font-bold mb-3 gradient-text">Interview Complete!</h1>
+                    <p class="text-slate-300 text-lg">Here's your detailed performance analysis</p>
+                </div>
+
+                <!-- Feedback Content -->
+                <div class="space-y-6">
+                    <!-- Score Card -->
+                    <div class="glass-strong rounded-2xl p-8 text-center">
+                        <h2 class="text-2xl font-bold text-white mb-4">Your Score</h2>
+                        <div class="inline-block">
+                            <div class="relative w-32 h-32">
+                                <svg class="transform -rotate-90 w-32 h-32">
+                                    <circle cx="64" cy="64" r="56" stroke="rgba(255,255,255,0.1)" stroke-width="8" fill="none" />
+                                    <circle cx="64" cy="64" r="56" stroke="url(#gradient)" stroke-width="8" fill="none" 
+                                        stroke-dasharray="351.86" stroke-dashoffset="35.186" stroke-linecap="round" />
+                                    <defs>
+                                        <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                            <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+                                            <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+                                        </linearGradient>
+                                    </defs>
+                                </svg>
+                                <div class="absolute inset-0 flex items-center justify-center">
+                                    <span class="text-4xl font-bold gradient-text">9/10</span>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-slate-300 mt-4">Excellent Performance!</p>
+                    </div>
+
+                    <!-- Detailed Feedback -->
+                    <div class="glass-strong rounded-2xl p-6">
+                        <div class="prose prose-invert max-w-none">
+                            <div class="feedback-content text-white">
+                                ${marked.parse(feedback)}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <button onclick="location.reload()" 
+                            class="btn-primary w-full text-white font-bold py-4 px-8 rounded-xl text-lg shadow-lg hover:shadow-xl transition-all transform hover:scale-[1.02] active:scale-[0.98]">
+                            🔄 Start New Interview
+                        </button>
+                        <button onclick="window.print()" 
+                            class="w-full bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white font-bold py-4 px-8 rounded-xl text-lg shadow-lg hover:shadow-xl transition-all transform hover:scale-[1.02] active:scale-[0.98]">
+                            📄 Print Feedback
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Custom Styles for Feedback Content -->
+                <style>
+                    .feedback-content h1, .feedback-content h2 {
+                        color: #a78bfa;
+                        font-weight: bold;
+                        margin-top: 1.5rem;
+                        margin-bottom: 1rem;
+                    }
+                    .feedback-content h3 {
+                        color: #c4b5fd;
+                        font-weight: 600;
+                        margin-top: 1rem;
+                        margin-bottom: 0.5rem;
+                    }
+                    .feedback-content ul, .feedback-content ol {
+                        margin-left: 1.5rem;
+                        margin-top: 0.5rem;
+                        margin-bottom: 0.5rem;
+                    }
+                    .feedback-content li {
+                        margin-bottom: 0.5rem;
+                        line-height: 1.6;
+                    }
+                    .feedback-content strong {
+                        color: #fbbf24;
+                    }
+                    .feedback-content p {
+                        margin-bottom: 1rem;
+                        line-height: 1.8;
+                    }
+                </style>
+            `;
+
+            // Add to page
+            document.getElementById('app').appendChild(feedbackSection);
         })
         .catch(err => {
             console.error("Feedback error:", err);
-            alert("Error generating feedback");
+            alert("Error generating feedback. Please try again.");
             updateStatus('Error', 'bg-red-500');
         });
 }
