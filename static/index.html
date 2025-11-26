@@ -18,7 +18,7 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
             min-height: 100vh;
             position: relative;
             overflow-x: hidden;
@@ -33,9 +33,9 @@
             width: 100%;
             height: 100%;
             background:
-                radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, rgba(138, 43, 226, 0.3) 0%, transparent 50%),
-                radial-gradient(circle at 40% 20%, rgba(72, 118, 255, 0.3) 0%, transparent 50%);
+                radial-gradient(circle at 20% 50%, rgba(212, 175, 55, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 215, 0, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(184, 134, 11, 0.12) 0%, transparent 50%);
             animation: gradientShift 15s ease infinite;
             z-index: 0;
         }
@@ -54,21 +54,21 @@
 
         /* Enhanced glass effect */
         .glass {
-            background: rgba(255, 255, 255, 0.08);
+            background: rgba(15, 32, 39, 0.6);
             backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
         }
 
         .glass-strong {
-            background: rgba(255, 255, 255, 0.12);
+            background: rgba(15, 32, 39, 0.75);
             backdrop-filter: blur(25px);
-            border: 1px solid rgba(255, 255, 255, 0.25);
+            border: 1px solid rgba(212, 175, 55, 0.25);
         }
 
         /* Gradient text */
         .gradient-text {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 50%, #d4af37 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -90,10 +90,11 @@
 
         /* Enhanced buttons */
         .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #d4af37 0%, #ffd700 100%);
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
+            color: #0f2027 !important;
         }
 
         .btn-primary::before {
@@ -103,7 +104,7 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
             transition: left 0.5s;
         }
 
@@ -113,7 +114,7 @@
 
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.5);
+            box-shadow: 0 10px 25px rgba(212, 175, 55, 0.5);
         }
 
         /* Input focus effects */
@@ -123,7 +124,8 @@
 
         .input-field:focus {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+            border-color: rgba(212, 175, 55, 0.5) !important;
         }
 
         /* Pulse animation for status */
@@ -162,7 +164,7 @@
 
         /* Webcam border glow */
         .webcam-glow {
-            box-shadow: 0 0 30px rgba(239, 68, 68, 0.5);
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.4);
         }
 
         /* Scrollbar styling */
@@ -171,17 +173,17 @@
         }
 
         ::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(15, 32, 39, 0.3);
             border-radius: 10px;
         }
 
         ::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(212, 175, 55, 0.4);
             border-radius: 10px;
         }
 
         ::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 255, 255, 0.3);
+            background: rgba(212, 175, 55, 0.6);
         }
 
         /* Responsive adjustments */
@@ -212,7 +214,7 @@
                         💼 Job Role / Description
                     </label>
                     <textarea id="job-role" rows="3"
-                        class="input-field w-full bg-white/10 rounded-xl p-4 border border-white/20 focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none text-white placeholder-slate-400 resize-none transition-all"
+                        class="input-field w-full bg-white/10 rounded-xl p-4 border border-yellow-600/20 focus:ring-2 focus:ring-yellow-500 focus:border-transparent outline-none text-white placeholder-slate-400 resize-none transition-all"
                         placeholder="e.g. Senior Frontend Engineer at Google, Full Stack Developer, Data Scientist..."></textarea>
                 </div>
 
@@ -223,13 +225,13 @@
                     </label>
                     <div class="relative">
                         <input type="file" id="resume-file" accept=".pdf"
-                            class="w-full bg-white/10 rounded-xl p-4 border border-white/20 text-white file:mr-4 file:py-2 file:px-6 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-gradient-to-r file:from-purple-500 file:to-pink-500 file:text-white hover:file:from-purple-600 hover:file:to-pink-600 file:transition-all file:cursor-pointer cursor-pointer">
+                            class="w-full bg-white/10 rounded-xl p-4 border border-yellow-600/20 text-white file:mr-4 file:py-2 file:px-6 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-gradient-to-r file:from-yellow-500 file:to-yellow-600 file:text-blue-900 hover:file:from-yellow-600 hover:file:to-yellow-700 file:transition-all file:cursor-pointer cursor-pointer">
                     </div>
                 </div>
 
                 <!-- Submit Button -->
                 <button type="submit"
-                    class="btn-primary w-full text-white font-bold py-4 px-8 rounded-xl text-lg shadow-lg hover:shadow-xl transition-all transform hover:scale-[1.02] active:scale-[0.98]">
+                    class="btn-primary w-full font-bold py-4 px-8 rounded-xl text-lg shadow-lg hover:shadow-xl transition-all transform hover:scale-[1.02] active:scale-[0.98]">
                     🚀 Start Interview
                 </button>
             </form>
@@ -241,7 +243,7 @@
             <div class="flex justify-between items-center mb-6">
                 <h2 class="text-2xl font-bold gradient-text">Live Interview Session</h2>
                 <button onclick="window.endInterview()"
-                    class="bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white font-semibold py-2 px-6 rounded-full transition-all transform hover:scale-105 active:scale-95 shadow-lg">
+                    class="bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-blue-900 font-semibold py-2 px-6 rounded-full transition-all transform hover:scale-105 active:scale-95 shadow-lg">
                     Exit Interview
                 </button>
             </div>
@@ -250,39 +252,40 @@
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
                 <!-- AI Interviewer Avatar -->
                 <div
-                    class="relative aspect-video bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 rounded-2xl overflow-hidden shadow-2xl border-2 border-purple-500/30">
+                    class="relative aspect-video bg-gradient-to-br from-blue-900 via-indigo-900 to-slate-900 rounded-2xl overflow-hidden shadow-2xl border-2 border-yellow-600/30">
                     <div class="absolute inset-0 flex items-center justify-center">
                         <!-- AI Avatar Icon -->
                         <div class="text-center">
                             <div
-                                class="w-32 h-32 mx-auto mb-4 rounded-full bg-gradient-to-br from-purple-400 to-pink-600 flex items-center justify-center shadow-2xl animate-pulse">
-                                <svg class="w-20 h-20 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                class="w-32 h-32 mx-auto mb-4 rounded-full bg-gradient-to-br from-yellow-400 to-yellow-600 flex items-center justify-center shadow-2xl animate-pulse">
+                                <svg class="w-20 h-20 text-blue-900" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z">
                                     </path>
                                 </svg>
                             </div>
-                            <p class="text-white font-semibold text-lg">AI Interviewer</p>
-                            <p class="text-purple-300 text-sm">Powered by Gemini AI</p>
+                            <p class="text-yellow-400 font-semibold text-lg">AI Interviewer</p>
+                            <p class="text-yellow-200 text-sm">Powered by Gemini AI</p>
                         </div>
                     </div>
                     <!-- Animated border effect -->
-                    <div class="absolute inset-0 border-2 border-purple-500/50 rounded-2xl animate-pulse"></div>
+                    <div class="absolute inset-0 border-2 border-yellow-500/50 rounded-2xl animate-pulse"></div>
                 </div>
 
                 <!-- User Webcam -->
                 <div
-                    class="relative aspect-video bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl overflow-hidden shadow-2xl border-2 border-white/10 webcam-glow">
+                    class="relative aspect-video bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl overflow-hidden shadow-2xl border-2 border-yellow-600/20 webcam-glow">
                     <video id="webcam" autoplay playsinline muted
                         class="w-full h-full object-cover transform scale-x-[-1]"></video>
                     <div
-                        class="absolute top-4 right-4 bg-red-500 px-4 py-2 rounded-full text-xs font-bold flex items-center gap-2 shadow-lg">
-                        <span class="w-2 h-2 bg-white rounded-full pulse"></span>
+                        class="absolute top-4 right-4 bg-gradient-to-r from-yellow-500 to-yellow-600 px-4 py-2 rounded-full text-xs font-bold flex items-center gap-2 shadow-lg text-blue-900">
+                        <span class="w-2 h-2 bg-blue-900 rounded-full pulse"></span>
                         LIVE
                     </div>
                     <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
-                        <p class="text-white font-semibold">You</p>
-                        <p class="text-xs text-white/70">Candidate</p>
+                        <p class="text-yellow-400 font-semibold">You</p>
+                        <p class="text-xs text-yellow-200/70">Candidate</p>
                     </div>
                 </div>
             </div>

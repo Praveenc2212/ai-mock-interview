@@ -101,22 +101,22 @@ function addMessageToUI(role, text) {
 
     // Beautiful unique colors for User vs AI
     if (role === 'You') {
-        // User: Cyan-Blue gradient with glow
-        div.className = 'chat-message p-4 rounded-xl ml-8 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 border-2 border-cyan-400/40 shadow-lg shadow-cyan-500/20';
+        // User: Gold gradient with glow
+        div.className = 'chat-message p-4 rounded-xl ml-8 bg-gradient-to-r from-yellow-500/20 to-yellow-600/20 border-2 border-yellow-500/40 shadow-lg shadow-yellow-500/20';
         div.innerHTML = `
             <div class="flex items-center gap-2 mb-2">
-                <div class="w-2 h-2 rounded-full bg-cyan-400"></div>
-                <div class="text-xs font-bold text-cyan-300">${role}</div>
+                <div class="w-2 h-2 rounded-full bg-yellow-400"></div>
+                <div class="text-xs font-bold text-yellow-300">${role}</div>
             </div>
             <div class="text-sm text-white">${text}</div>
         `;
     } else {
-        // AI: Purple-Pink gradient with glow
-        div.className = 'chat-message p-4 rounded-xl mr-8 bg-gradient-to-r from-purple-500/20 to-pink-500/20 border-2 border-purple-400/40 shadow-lg shadow-purple-500/20';
+        // AI: Dark Blue gradient with glow
+        div.className = 'chat-message p-4 rounded-xl mr-8 bg-gradient-to-r from-blue-500/20 to-indigo-500/20 border-2 border-blue-400/40 shadow-lg shadow-blue-500/20';
         div.innerHTML = `
             <div class="flex items-center gap-2 mb-2">
-                <div class="w-2 h-2 rounded-full bg-purple-400 animate-pulse"></div>
-                <div class="text-xs font-bold text-purple-300">${role}</div>
+                <div class="w-2 h-2 rounded-full bg-blue-400 animate-pulse"></div>
+                <div class="text-xs font-bold text-blue-300">${role}</div>
             </div>
             <div class="text-sm text-white">${text}</div>
         `;
