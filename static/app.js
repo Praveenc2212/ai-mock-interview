@@ -27,26 +27,33 @@ if (!SpeechRecognition) {
 }
 
 const recognition = new SpeechRecognition();
-recognition.continuous = false;
+recognition.continuous = true;  // Changed to true for longer answers
 recognition.lang = 'en-US';
-recognition.interimResults = false;
+recognition.interimResults = true;  // Changed to true to capture partial results
+recognition.maxAlternatives = 1;
+
+// Variables for handling longer answers with pauses
+let speechTimeout;
+let currentTranscript = '';
 
 recognition.onstart = () => {
     state.isListening = true;
-    updateStatus('Listening...', 'bg-red-500');
-    console.log("🎤 Speech recognition started - speak now!");
+    updateStatus('Listening... (pauses are OK)', 'bg-red-500');
+    console.log("🎤 Speech recognition started - you can pause while thinking!");
+    currentTranscript = '';
 };
 
 recognition.onend = () => {
     state.isListening = false;
     console.log("🎤 Speech recognition ended");
+    clearTimeout(speechTimeout);
+
     if (state.isSpeaking || state.isProcessing) {
         return;
     }
     // Auto-restart if not speaking/processing
     setTimeout(() => {
         if (!state.isSpeaking && !state.isProcessing && !uploadSection.classList.contains('hidden')) {
-            // Don't restart if we are still in upload section, wait for interview start
             return;
         }
         if (!state.isSpeaking && !state.isProcessing && interviewSection.classList.contains('hidden') === false) {
@@ -73,10 +80,35 @@ recognition.onerror = (event) => {
 };
 
 recognition.onresult = (event) => {
-    const transcript = event.results[0][0].transcript;
-    console.log("✅ User said:", transcript);
-    addMessageToUI('You', transcript);
-    handleUserResponse(transcript);
+    // Build complete transcript from all results
+    let interimTranscript = '';
+    let finalTranscript = '';
+
+    for (let i = 0; i < event.results.length; i++) {
+        const transcript = event.results[i][0].transcript;
+        if (event.results[i].isFinal) {
+            finalTranscript += transcript + ' ';
+        } else {
+            interimTranscript += transcript;
+        }
+    }
+
+    currentTranscript = (finalTranscript + interimTranscript).trim();
+    console.log("📝 Current transcript:", currentTranscript);
+
+    // Clear previous timeout
+    clearTimeout(speechTimeout);
+
+    // Wait 3 seconds of silence before processing
+    speechTimeout = setTimeout(() => {
+        if (currentTranscript && currentTranscript.length > 0) {
+            console.log("✅ Processing complete answer:", currentTranscript);
+            addMessageToUI('You', currentTranscript);
+            handleUserResponse(currentTranscript);
+            currentTranscript = '';
+            recognition.stop();
+        }
+    }, 3000); // 3 seconds of silence
 };
 
 // Webcam Setup
@@ -134,33 +166,73 @@ function addMessageToUI(role, text) {
 }
 
 function speak(text) {
-    if ('speechSynthesis' in window) {
-        state.isSpeaking = true;
-        updateStatus('AI Speaking...', 'bg-green-500');
+    console.log("🔊 Attempting to speak:", text);
 
-        window.speechSynthesis.cancel(); // Cancel previous
-
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.onend = () => {
-            state.isSpeaking = false;
-            // Start listening after AI finishes speaking
-            try {
-                recognition.start();
-            } catch (e) {
-                console.log("Recognition already started");
-            }
-        };
-        window.speechSynthesis.speak(utterance);
-    } else {
-        console.error("TTS not supported");
-        // Fallback or just log
+    if (!('speechSynthesis' in window)) {
+        console.error("❌ TTS not supported in this browser");
         state.isSpeaking = false;
         try {
             recognition.start();
         } catch (e) {
             console.log("Recognition already started");
         }
+        return;
     }
+
+    state.isSpeaking = true;
+    updateStatus('AI Speaking...', 'bg-green-500');
+
+    // Cancel any ongoing speech
+    window.speechSynthesis.cancel();
+
+    // Small delay to ensure cancel completes
+    setTimeout(() => {
+        const utterance = new SpeechSynthesisUtterance(text);
+
+        // Configure voice settings
+        utterance.rate = 1.0;  // Normal speed
+        utterance.pitch = 1.0;  // Normal pitch
+        utterance.volume = 1.0;  // Full volume
+
+        // Get available voices and select English
+        const voices = window.speechSynthesis.getVoices();
+        const englishVoice = voices.find(voice => voice.lang.startsWith('en'));
+        if (englishVoice) {
+            utterance.voice = englishVoice;
+            console.log("🎙️ Using voice:", englishVoice.name);
+        }
+
+        utterance.onstart = () => {
+            console.log("🔊 Speech started");
+        };
+
+        utterance.onend = () => {
+            console.log("✅ Speech ended");
+            state.isSpeaking = false;
+            // Start listening after AI finishes speaking
+            setTimeout(() => {
+                try {
+                    recognition.start();
+                    console.log("🎤 Restarted listening after speech");
+                } catch (e) {
+                    console.log("Recognition already started:", e);
+                }
+            }, 500);
+        };
+
+        utterance.onerror = (event) => {
+            console.error("❌ Speech error:", event.error);
+            state.isSpeaking = false;
+            try {
+                recognition.start();
+            } catch (e) {
+                console.log("Recognition already started");
+            }
+        };
+
+        console.log("🚀 Calling speechSynthesis.speak()");
+        window.speechSynthesis.speak(utterance);
+    }, 100);
 }
 
 async function handleUserResponse(message) {
