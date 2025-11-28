@@ -44,3 +44,10 @@ server_error.log
 # OS
 .DS_Store
 Thumbs.db
+
+# Deployment
+.fly/
+fly.toml.backup
+
+# Backups
+*.backup

@@ -90,6 +90,18 @@ ai-mock-interview/
 
 The `.gitignore` file is configured to exclude sensitive files.
 
+## Deployment
+
+Ready to deploy your AI Mock Interview System? Check out our comprehensive deployment guide:
+
+📚 **[DEPLOYMENT.md](DEPLOYMENT.md)** - Complete guide for deploying to:
+- **Render** (Recommended - easiest setup, 750 free hours/month)
+- **Railway** (Great UX, $5 free credit/month)
+- **Fly.io** (Advanced control, 3 free VMs)
+
+All platforms offer free tiers perfect for this application!
+
+
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
